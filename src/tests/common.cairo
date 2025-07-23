@@ -3,9 +3,9 @@ use openzeppelin_utils::serde::SerializedAppend;
 use snforge_std::{
     start_cheat_caller_address, stop_cheat_caller_address, start_cheat_max_fee_global,
 };
-use starknet::{ContractAddress, contract_address_const};
+use starknet::{ContractAddress};
 use stark_vrf::ecvrf::Proof;
-use utils::constants::{AUTHORIZED, OWNER};
+// use utils::constants::{AUTHORIZED, OWNER};
 
 use cartridge_vrf::vrf_provider::vrf_provider::VrfProvider;
 use cartridge_vrf::vrf_provider::vrf_provider_component::{
@@ -17,20 +17,23 @@ use cartridge_vrf::mocks::vrf_consumer_mock::{
 };
 
 pub fn PROVIDER() -> ContractAddress {
-    contract_address_const::<'PROVIDER'>()
+    'PROVIDER'.try_into().unwrap()
 }
 
 pub fn CONSUMER1() -> ContractAddress {
-    contract_address_const::<'CONSUMER1'>()
+    'CONSUMER1'.try_into().unwrap()
 }
 
 pub fn CONSUMER2() -> ContractAddress {
-    contract_address_const::<'CONSUMER2'>()
+    'CONSUMER2'.try_into().unwrap()
 }
 
 pub fn PLAYER1() -> ContractAddress {
-    contract_address_const::<'PLAYER1'>()
+    'PLAYER1'.try_into().unwrap()
 }
+
+pub const AUTHORIZED: ContractAddress = 'AUTHORIZED'.try_into().unwrap();
+pub const OWNER: ContractAddress = 'OWNER'.try_into().unwrap();
 
 #[derive(Drop, Copy, Clone)]
 pub struct SetupResult {
@@ -45,7 +48,7 @@ pub struct SetupResult {
 
 pub fn setup() -> SetupResult {
     let mut provider_calldata = array![];
-    provider_calldata.append_serde(OWNER());
+    provider_calldata.append_serde(OWNER);
     provider_calldata
         .append_serde(
             PublicKey {
@@ -72,7 +75,7 @@ pub fn setup() -> SetupResult {
 }
 
 pub fn submit_random(provider: IVrfProviderDispatcher, seed: felt252, proof: Proof) {
-    start_cheat_caller_address(provider.contract_address, AUTHORIZED());
+    start_cheat_caller_address(provider.contract_address, AUTHORIZED);
     provider.submit_random(seed, proof);
     stop_cheat_caller_address(provider.contract_address);
 }

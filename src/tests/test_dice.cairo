@@ -1,6 +1,6 @@
 use openzeppelin_testing as utils;
 use utils::constants::{OWNER, AUTHORIZED, CALLER, OTHER, ZERO};
-use starknet::{ClassHash, ContractAddress, contract_address_const};
+use starknet::{ClassHash, ContractAddress};
 
 use snforge_std::{start_cheat_caller_address, stop_cheat_caller_address};
 
